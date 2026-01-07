@@ -3,6 +3,7 @@ import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:saees_cards/helpers/consts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
 class Api {
   Future<Response> get(String endPoint) async {
@@ -100,4 +101,36 @@ class Api {
   // Future<List>upload(
   //   File file
   // ){}
+    
+    Future<List> upload(File file) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString("token");
+
+  var request = http.MultipartRequest(
+    "POST",
+    Uri.parse("$baseUrl/vendor/uploader"),
+  );
+
+  request.headers.addAll({
+    "Accept": "application/json",
+    "Authorization": "Bearer $token",
+  });
+
+  request.files.add(
+    await http.MultipartFile.fromPath(
+      "file",
+      file.path,
+    ),
+  );
+
+  var response = await request.send();
+  var responseBody = await response.stream.bytesToString();
+
+  if (response.statusCode == 200) {
+    return [true, responseBody];
+  } else {
+    return [false, responseBody];
+  }
+}
+
 }

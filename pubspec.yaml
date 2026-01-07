@@ -42,6 +42,7 @@ dependencies:
   another_flushbar:
   mobile_scanner: ^5.0.0
   flutter_animate:
+  image_picker: ^1.0.7
   introduction_screen:
 dev_dependencies:
   flutter_test:
