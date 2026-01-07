@@ -92,4 +92,22 @@ class AuthProvider extends BaseProvider {
       return [false, json.decode(response.body)["message"]];
     }
   }
+
+  Future<List> validateQr(String code) async {
+  setBusy(true);
+
+  final response = await api.post("/wallets/validate", {
+    "code": code,
+  });
+
+  if (response.statusCode == 200) {
+    setBusy(false);
+    return [true, "QR validated successfully"];
+  } else {
+    setBusy(false);
+    return [false, "Invalid or expired QR"];
+  }
+}
+
+  
 }

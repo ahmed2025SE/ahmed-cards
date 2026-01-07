@@ -40,6 +40,7 @@ dependencies:
   google_fonts:
   shimmer:
   another_flushbar:
+  mobile_scanner: ^5.0.0
   flutter_animate:
   introduction_screen:
 dev_dependencies:

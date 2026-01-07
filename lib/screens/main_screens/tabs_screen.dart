@@ -7,7 +7,8 @@ import 'package:saees_cards/providers/auth_provider.dart';
 import 'package:saees_cards/screens/main_screens/tabs_content/invoices_content.dart';
 import 'package:saees_cards/screens/main_screens/tabs_content/wallet_content.dart';
 import 'package:saees_cards/widgets/dialogs/custom_drawer.dart';
-
+import 'package:saees_cards/screens/handling_screens/qr_scanner.dart';
+import 'package:saees_cards/widgets/dialogs/flush_bar.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -67,10 +68,24 @@ class _TabsScreenState extends State<TabsScreen> {
             backgroundColor: primaryColor,
             child: Icon(Icons.qr_code, color: whiteColor),
             onPressed: () {
-                // TODO QR Functionality 
-                 
-                // String? qrValue ;
-
+                // TODO QR Functionality
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const QrScanner(),
+                  ),
+                ).then((qrResult) {
+                  if (qrResult != null && context.mounted) {
+                    context.read<AuthProvider>().validateQr(qrResult).then((result) {
+                      showCustomFlushBar(
+                        context,
+                        result.first ? "Success" : "Failed",
+                        result.last,
+                        result.first,
+                      );
+                    });
+                  }
+                });
             },
           ),
         );
